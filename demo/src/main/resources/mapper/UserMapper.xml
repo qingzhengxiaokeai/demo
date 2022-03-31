@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scut.mapper.UserMapper">
+
+    <select id="getUser" parameterType="Integer" resultType="com.scut.entity.User">
+        select * from user where id=#{id}
+    </select>
+
+    <insert id="insertOne">
+        insert into user(id,username,password,sex)
+            values(#{id},#{username},#{password},#{sex})
+    </insert>
+
+
+    <insert id="insertMany">
+        insert into user(id,username,password,sex)
+        values
+        <foreach collection="list" item="user" index="index" separator=",">
+            (#{User.id} , #{User.username},#{User.password},#{User.sex})
+        </foreach>
+    </insert>
+
+   <delete id="deleteUser" >
+        select * from user where id=#{id}
+    </delete>
+
+    <update id="updateUser" parameterType="com.scut.entity.User">
+        update user
+        set username = #{username},
+            password = #{password},
+            sex=#{sex}
+        where id = #{id}
+    </update>
+
+    <!--查询1-->
+    <select id="selectForPage1" resultType="com.scut.entity.User">
+        select * from user limit #{param1},#{param2}
+    </select>
+
+    <!--查询所有数据-->
+    <select id="selectForPage2" resultType="com.scut.entity.User">
+        select * from user limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from user
+    </select>
+
+    <select id="selectByPageBean" resultType="com.scut.entity.User">
+        select * from user limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="selectByLike" resultType="com.scut.entity.User" >
+        select * from user
+        where username like concat('%',#{keywords},'%')
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="selectCount2" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(*) from user
+        where username like concat('%',#{keywords},'%')
+    </select>
+</mapper>
